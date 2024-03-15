@@ -1,4 +1,4 @@
-# API endpoint
+# API Paths
 
 ### Method GET
 - http://localhost:8000/books; untuk mengambil data buku
