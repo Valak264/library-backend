@@ -35,4 +35,8 @@ const addBooks = (request, h) => {
     return response;
 }
 
-module.exports = addBooks;
+const getBooks = () => ({
+    status: 'success',
+    data: { books },
+})
+module.exports = { addBooks, getBooks };
