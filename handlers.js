@@ -4,11 +4,11 @@ const addBooks = (request, h) => {
     const isAvailable = true;
     const { title, author, year, publisher, isbn } = request.payload;
     const newBook = {
+        isbn,
         title,
         author,
         year,
         publisher,
-        isbn,
         isAvailable,
     }
     books.push(newBook);
@@ -39,4 +39,31 @@ const getBooks = () => ({
     status: 'success',
     data: { books },
 })
-module.exports = { addBooks, getBooks };
+
+const borrowBookByIsbn = (request, h) => {
+    const isbn = request.query.isbn;
+    const selectedBook = books.findIndex((book) => book.isbn === isbn && book.isAvailable);
+
+    if (selectedBook !== -1) {
+        books[selectedBook].isAvailable = false;
+        const response = h.response({
+            status: 'success',
+            message: 'Buku berhasil dipinjam',
+            data: {
+                bookBorrowed: books[selectedBook]
+            },
+        })
+        response.code(200);
+        return response;
+    }
+
+    const response = h.response({
+        status: 'error',
+        message: 'Buku tidak ditemukan',
+    })
+
+    response.code(404);
+    return response;
+}
+
+module.exports = { addBooks, getBooks, borrowBookByIsbn };
