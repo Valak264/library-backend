@@ -7,4 +7,4 @@
 - http://localhost:8000/books; untuk menambahkan buku
 
 ### Method PUT
-- http://localhost:8000/borrowBook; untuk meminjam buku
+- http://localhost:8000/borrowBook; untuk meminjam buku, dengan parameter kueri ISBN
