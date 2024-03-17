@@ -99,7 +99,11 @@ const editBook = (request, h) => {
     const found = selectedBook !== -1;
 
     if (found) {
-        books[selectedBook] = request.payload;
+        books[selectedBook].isbn = request.payload.isbn;
+        books[selectedBook].title = request.payload.title;
+        books[selectedBook].author = request.payload.author;
+        books[selectedBook].year = request.payload.year;
+        books[selectedBook].publisher = request.payload.publisher;
         const response = h.response({
             status: 'success',
             message: 'Data buku berhasil diubah !',
@@ -107,12 +111,12 @@ const editBook = (request, h) => {
         response.code(200);
         return response;
     } else {
-        books[selectedBook] = request.payload;
         const response = h.response({
             status: 'failed',
             message: 'Buku tidak ditemukan',
         })
         response.code(404);
+        return response;
     }
 }
 
