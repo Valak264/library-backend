@@ -11,19 +11,23 @@ const addBooks = (request, h) => {
         publisher,
         isAvailable,
     }
-    books.push(newBook);
-    const isSuccess = books.filter((book) => book.isbn === isbn).length === 1;
 
-    if (isSuccess) {
-        const response = h.response({
-            status: 'success',
-            message: 'Buku berhasil ditambahkan !',
-            data: {
-                booklist: books,
-            }
-        })
-        response.code(201);
-        return response;
+    const isUnique = books.find((book) => book.isbn === isbn) === undefined;
+
+    if (isUnique) {
+        books.push(newBook);
+        const isSuccess = books.filter((book) => book.isbn === isbn).length === 1;
+        if (isSuccess) {
+            const response = h.response({
+                status: 'success',
+                message: 'Buku berhasil ditambahkan !',
+                data: {
+                    booklist: books,
+                }
+            })
+            response.code(201);
+            return response;
+        }    
     }
 
     const response = h.response({
@@ -37,11 +41,11 @@ const addBooks = (request, h) => {
 
 const getBooks = () => ({
     status: 'success',
-    data: { books },
+    data: books,
 })
 
 const borrowBookByIsbn = (request, h) => {
-    const isbn = request.query.isbn;
+    const isbn = request.params.isbn;
     const selectedBook = books.findIndex((book) => book.isbn === isbn && book.isAvailable);
 
     if (selectedBook !== -1) {
@@ -66,4 +70,50 @@ const borrowBookByIsbn = (request, h) => {
     return response;
 }
 
-module.exports = { addBooks, getBooks, borrowBookByIsbn };
+const getBookByIsbn = (request, h) => {
+    const isbn = request.params.isbn;
+    const book = books.filter((book) => book.isbn === isbn);
+    const found = book.length === 1;
+
+    if (found) {
+        const response = h.response({
+            status: 'success',
+            message: 'Data ditemukan !',
+            data: book[0],
+        })
+        response.code(200);
+        return response;
+    } else {
+        const response = h.response({
+            status: 'failed',
+            message: 'Data Tidak Ditemukan',
+        })
+        response.code(404);
+        return response;
+    }
+}
+
+const editBook = (request, h) => {
+    const isbn = request.params.isbn;
+    const selectedBook = books.findIndex((book) => book.isbn === isbn);
+    const found = selectedBook !== -1;
+
+    if (found) {
+        books[selectedBook] = request.payload;
+        const response = h.response({
+            status: 'success',
+            message: 'Data buku berhasil diubah !',
+        })
+        response.code(200);
+        return response;
+    } else {
+        books[selectedBook] = request.payload;
+        const response = h.response({
+            status: 'failed',
+            message: 'Buku tidak ditemukan',
+        })
+        response.code(404);
+    }
+}
+
+module.exports = { addBooks, getBooks, borrowBookByIsbn, getBookByIsbn, editBook };
