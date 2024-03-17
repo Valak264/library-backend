@@ -120,4 +120,32 @@ const editBook = (request, h) => {
     }
 }
 
-module.exports = { addBooks, getBooks, borrowBookByIsbn, getBookByIsbn, editBook };
+const deleteBook = (request, h) => {
+    const isbn = request.params.isbn;
+    const selectedBook = books.findIndex((book) => book.isbn === isbn);
+    const found = selectedBook !== -1;
+    if (found) {
+        books.splice(selectedBook, 1);
+        const response = h.response({
+            status: 'success',
+            message: 'Buku berhasil dihapus',
+        })
+        response.code(200);
+        return response;
+    }
+    const response = h.response({
+        status: 'failed',
+        message: 'Buku tidak ditemukan',
+    })
+    response.code(404);
+    return response;
+}
+
+module.exports = { 
+    addBooks, 
+    getBooks, 
+    borrowBookByIsbn, 
+    getBookByIsbn, 
+    editBook,
+    deleteBook,
+ };
