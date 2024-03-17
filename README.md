@@ -29,7 +29,10 @@ Untuk penyimpanan data buku untuk sementara masih berupa sebuah array.
 - http://localhost:8000/books; untuk menambahkan buku
 
 ### Method PATCH
-- http://localhost:8000/books/:isbn/borrowBook; untuk meminjam buku, dengan parameter kueri ISBN
+- http://localhost:8000/books/:isbn/borrowBook; untuk meminjam buku berdasarkan ISBN
 
 ### Method PUT
-- - http://localhost:8000/books/:isbn/editBook; untuk mengedit data buku berdasarkan ISBN
+- http://localhost:8000/books/:isbn/editBook; untuk mengedit data buku berdasarkan ISBN
+
+### Method DELETE
+- http://localhost:8000/books/:isbn/deleteBook; untuk menghapus data buku berdasarkan ISBN
